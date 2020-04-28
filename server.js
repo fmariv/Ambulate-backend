@@ -3,7 +3,6 @@ const app = express()
 const apiRouter = require('./routes/routes.js')
 
 // Add response 
-// Response method not added yet
 app.use('/ambulate-api/v1.0', apiRouter)
 
 // Init app at port 8080
