@@ -38,7 +38,7 @@ const getRecount = (request, response) => {
 
 const getDistance = (request, response) => {
     let pedestrian_id = request.params.pedestrian_id;
-    // call getRouteGeoJSON
+    // llamar funcion getRouteGeoJSOn
 }
 
 
