@@ -12,34 +12,38 @@ const pool = new Pool({
     port: port,
 })
 
-const getRecount = (request, response) => {
-    let pedestrian_id = request.params.pedestrian_id;
+class StatService {
 
-    let query = `SELECT
-                    (SELECT COUNT(*) as forms_count
-                    FROM gemott.form
-                    where pedestrian_id = ${pedestrian_id}  
-                    ),
-                    (SELECT COUNT(*) as routes_count
-                    FROM gemott.route
-                    where pedestrian_id = ${pedestrian_id});
-                `
-    pool.query(query, (err, res) => {
-        if (err) {
-            console.error('Error running the query. ', err.stack)
-            return response.json({
-                mensaje: 'Ops! Sorry, there has been an error running the query'
-            })
-        }
-        let data = res.rows[0]
-        response.json(data)
-    })
-};
-
-const getDistance = (request, response) => {
-    let pedestrian_id = request.params.pedestrian_id;
-    // llamar funcion getRouteGeoJSOn
+    recount(request, response) {
+        let pedestrian_id = request.params.pedestrian_id;
+    
+        let query = `SELECT
+                        (SELECT COUNT(*) as forms_count
+                        FROM gemott.form
+                        where pedestrian_id = ${pedestrian_id}  
+                        ),
+                        (SELECT COUNT(*) as routes_count
+                        FROM gemott.route
+                        where pedestrian_id = ${pedestrian_id});
+                    `
+        pool.query(query, (err, res) => {
+            if (err) {
+                console.error('Error running the query. ', err.stack)
+                return response.json({
+                    mensaje: 'Ops! Sorry, there has been an error running the query'
+                })
+            }
+            let data = res.rows[0]
+            response.json(data)
+        })
+    };
+    
+    distance(request, response) {
+        let pedestrian_id = request.params.pedestrian_id;
+        // llamar funcion getRouteGeoJSOn
+    }
+    
 }
 
 
-module.exports = { getRecount }
+module.exports = { StatService }
