@@ -40,7 +40,7 @@ class StatService {
     
     distance(request, response) {
         let pedestrian_id = request.params.pedestrian_id;
-        // llamar funcion getRouteGeoJSOn
+        let user
     }
     
 }

@@ -36,7 +36,25 @@ class RouteService {
         });
     }
 
-
+    post(request, response) {      
+        let pedestrian_id = request.body.properties.pedestrian_id 
+        let geometry = JSON.stringify(request.body.geometry)
+        let geojson = request.body
+        let layerQuery = `INSERT INTO gemott.route (pedestrian_id, geom) 
+                          VALUES (${pedestrian_id}, 
+                          ST_TRANSFORM(ST_GeomFromGeoJSON('${geometry}'), 25831)
+                          );`
+        
+        pool.query(layerQuery, (err, res) => {
+        if (err) {
+            console.error('Error running the query. ', err.stack)
+            return response.json({
+                mensaje: err.stack
+            })
+        }
+        response.json(geojson)
+        });
+    }
 }
 
 class FormService {
@@ -71,7 +89,6 @@ class FormService {
             response.json(geojson)
         });
     }
-
 }
 
 
