@@ -1,6 +1,6 @@
 const Pool = require('pg').Pool
 const GeoJSON = require('geojson');
-const config = require('../../config.js');
+const config = require('../../db/config.js');
 const { db: { user, host, database, password, port } } = config;
 
 const pool = new Pool({
@@ -37,7 +37,7 @@ class RouteService {
     }
 
     post(request, response) {      
-        let pedestrian_id = request.body.properties.pedestrian_id 
+        let pedestrian_id = request.params.pedestrian_id 
         let geometry = JSON.stringify(request.body.geometry)
         let geojson = request.body
         let layerQuery = `INSERT INTO gemott.route (pedestrian_id, geom) 
@@ -49,7 +49,7 @@ class RouteService {
         if (err) {
             console.error('Error running the query. ', err.stack)
             return response.json({
-                mensaje: err.stack
+                mensaje: 'Ops! Sorry, there has been an error running the query'
             })
         }
         response.json(geojson)
@@ -70,7 +70,6 @@ class FormService {
                     and t3.pedestrian_id = ${pedestrian_id})
                     as T(ans1, ans2, geom);`
         
-        // Query the geometries
         pool.query(layerQuery, (err, res) => {
             if (err) {
                 console.error('Error running the query. ', err.stack)

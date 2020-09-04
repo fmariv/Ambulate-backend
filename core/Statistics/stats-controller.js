@@ -1,6 +1,7 @@
 const Pool = require('pg').Pool
-const GeoJSON = require('geojson');
-const config = require('../../config.js');
+const Request = require('request');
+const Turf = require('turf');
+const config = require('../../db/config.js');
 const { db: { user, host, database, password, port } } = config;
 const _ = require('underscore');
 
@@ -40,9 +41,22 @@ class StatService {
     
     distance(request, response) {
         let pedestrian_id = request.params.pedestrian_id;
-        let user
+        let request_options = {
+            url: `http://localhost:8080/api.ambulate/v0/pedestrians/${pedestrian_id}/routes`,
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Accept-Charset': 'utf-8'
+            }
+        };
+
+        Request(request_options, (err, res, body) => {
+            let json = body
+            let length = Turf.length(json, {units: 'kilometers'})
+            // Error -> Turf.length is not a function!!
+            console.log(length)
+        });
     }
-    
 }
 
 
