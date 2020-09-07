@@ -1,9 +1,14 @@
+const Pool = require('pg').Pool
 const express = require('express')
 const app = express()
 const apiRouter = require('./config/routes.js')
 const bodyParser = require('body-parser');
 const passport = require('passport')
-const local_strategy = require('./config/passport.js')
+const passportConfig = require('./config/passport.js')
+
+const localStrategy = passportConfig.localStrategy
+const serialize = passportConfig.serialize
+const deserialize = passportConfig.deserialize
 
 const expressSession = require('express-session')({
     secret: 'secret',
@@ -18,10 +23,11 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use('/api.ambulate/v0', apiRouter)
 
-passport.use(local_strategy)
+passport.use(localStrategy)
+passport.serializeUser(serialize)
+passport.deserializeUser(deserialize)
 
 // Init app
-const port = process.env.PORT || 8080;
-app.listen(port, () => {
+app.listen(process.env.PORT || 8080, () => {
     console.log("Ambulate API is running. Server initializated at port 8080")
 })
