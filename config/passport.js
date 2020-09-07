@@ -19,8 +19,8 @@ const localStrategy = new LocalStrategy(
         passwordField: 'password'
     },
     (email, password, done) => {
-        sql_query = `SELECT id, mail, pass FROM gemott.pedestrian WHERE mail='${email}';`
-        pool.query(sql_query, (err, result) => {
+        sqlQuery = `SELECT id, mail, pass FROM gemott.pedestrian WHERE mail='${email}';`
+        pool.query(sqlQuery, (err, result) => {
             if(err) {
                 return done(err)
             }

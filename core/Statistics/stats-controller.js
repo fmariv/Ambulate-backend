@@ -16,18 +16,18 @@ const pool = new Pool({
 class StatService {
 
     recount(request, response) {
-        let pedestrian_id = request.params.pedestrian_id;
+        let pedestrianId = request.params.pedestrian_id;
     
-        let query = `SELECT
+        let sqlQuery = `SELECT
                         (SELECT COUNT(*) as forms_count
                         FROM gemott.form
-                        where pedestrian_id = ${pedestrian_id}  
+                        where pedestrian_id = ${pedestrianId}  
                         ),
                         (SELECT COUNT(*) as routes_count
                         FROM gemott.route
-                        where pedestrian_id = ${pedestrian_id});
+                        where pedestrian_id = ${pedestrianId});
                     `
-        pool.query(query, (err, res) => {
+        pool.query(sqlQuery, (err, res) => {
             if (err) {
                 console.error('Error running the query. ', err.stack)
                 return response.json({
@@ -40,9 +40,9 @@ class StatService {
     };
     
     distance(request, response) {
-        let pedestrian_id = request.params.pedestrian_id;
-        let request_options = {
-            url: `http://localhost:8080/api.ambulate/v0/pedestrians/${pedestrian_id}/routes`,
+        let pedestrianId = request.params.pedestrian_id;
+        let requestOptions = {
+            url: `http://localhost:8080/api.ambulate/v0/pedestrians/${pedestrianId}/routes`,
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -50,7 +50,7 @@ class StatService {
             }
         };
 
-        Request(request_options, (err, res, body) => {
+        Request(requestOptions, (err, res, body) => {
             let json = body
             let length = Turf.length(json, {units: 'kilometers'})
             // Error -> Turf.length is not a function!!

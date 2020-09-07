@@ -14,8 +14,8 @@ const pool = new Pool({
 class RouteService {
 
     get(request, response) {
-        let pedestrian_id = request.params.pedestrian_id;
-        let layerQuery = `SELECT ST_AsGeoJSON(t.geom) FROM gemott.route AS t WHERE pedestrian_id = ${pedestrian_id};`
+        let pedestrianId = request.params.pedestrian_id;
+        let layerQuery = `SELECT ST_AsGeoJSON(t.geom) FROM gemott.route AS t WHERE pedestrian_id = ${pedestrianId};`
         
         // Query the geometries
         pool.query(layerQuery, (err, res) => {
@@ -31,17 +31,17 @@ class RouteService {
             });
 
             // Parse and send the geoJSON
-            let geojson = GeoJSON.parse(data, {LineString: 'coordinates'})
-            response.json(geojson)
+            let geoJson = GeoJSON.parse(data, {LineString: 'coordinates'})
+            response.json(geoJson)
         });
     }
 
     post(request, response) {      
-        let pedestrian_id = request.params.pedestrian_id 
+        let pedestrianId = request.params.pedestrianId 
         let geometry = JSON.stringify(request.body.geometry)
-        let geojson = request.body
+        let geoJson = request.body
         let layerQuery = `INSERT INTO gemott.route (pedestrian_id, geom) 
-                          VALUES (${pedestrian_id}, 
+                          VALUES (${pedestrianId}, 
                           ST_TRANSFORM(ST_GeomFromGeoJSON('${geometry}'), 25831)
                           );`
         
@@ -52,7 +52,7 @@ class RouteService {
                 mensaje: 'Ops! Sorry, there has been an error running the query'
             })
         }
-        response.json(geojson)
+        response.json(geoJson)
         });
     }
 }
@@ -61,13 +61,13 @@ class FormService {
 
     // revisar la respuesta
     get(request, response) {
-        let pedestrian_id = request.params.pedestrian_id;
+        let pedestrianID = request.params.pedestrian_id;
         let layerQuery = `select ST_AsGeoJSON(t.*)
                     FROM (select 
                     t1.answer, t2.answer, t3.geom from gemott.quest1 as t1, gemott.quest2 as t2, gemott.form as t3 
                     where t2.form_id = t3.id 
                     and t1.form_id = t3.id 
-                    and t3.pedestrian_id = ${pedestrian_id})
+                    and t3.pedestrian_id = ${pedestrianID})
                     as T(ans1, ans2, geom);`
         
         pool.query(layerQuery, (err, res) => {
@@ -84,8 +84,8 @@ class FormService {
             });
 
             // Parse and send the geoJSON
-            let geojson = GeoJSON.parse(data, {GeoJSON: 'geometry'})
-            response.json(geojson)
+            let geoJson = GeoJSON.parse(data, {GeoJSON: 'geometry'})
+            response.json(geoJson)
         });
     }
 }
