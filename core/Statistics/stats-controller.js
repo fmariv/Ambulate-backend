@@ -1,6 +1,6 @@
 const Pool = require('pg').Pool
 const Request = require('request');
-const Turf = require('turf');
+const lengthCalculator = require('@turf/length').default;
 const config = require('../../db/config.js');
 const { db: { user, host, database, password, port } } = config;
 const _ = require('underscore');
@@ -51,10 +51,10 @@ class StatService {
         };
 
         Request(requestOptions, (err, res, body) => {
-            let json = body
-            let length = Turf.length(json, {units: 'kilometers'})
-            // Error -> Turf.length is not a function!!
-            console.log(length)
+            let json = JSON.parse(body)
+            let routeLength = lengthCalculator(json, {units: 'kilometers'}).toFixed(2)
+            
+            response.json({"length": routeLength})
         });
     }
 }
