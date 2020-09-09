@@ -36,17 +36,23 @@ class RouteService {
         });
     }
 
+    /* 
+    Falta función para crear un registro de ruta en la BD i retornar su ID
+    */
+
     post(request, response) {      
-        let pedestrianId = request.params.pedestrianId 
+        let pedestrianId = request.params.pedestrian_id 
         let geometry = JSON.stringify(request.body.geometry)
+        let routeId = request.body.properties.route_id
         let geoJson = request.body
-        let layerQuery = `INSERT INTO gemott.route (pedestrian_id, geom) 
-                          VALUES (${pedestrianId}, 
-                          ST_TRANSFORM(ST_GeomFromGeoJSON('${geometry}'), 25831)
-                          );`
+        let layerQuery = `UPDATE gemott.route
+                          SET geom = ST_TRANSFORM(ST_GeomFromGeoJSON('${geometry}'), 25831)
+                          WHERE id=${routeId} AND pedestrian_id=${pedestrianId}
+                          ;`
         
         pool.query(layerQuery, (err, res) => {
         if (err) {
+            console.log(layerQuery)
             console.error('Error running the query. ', err.stack)
             return response.json({
                 mensaje: 'Ops! Sorry, there has been an error running the query'
