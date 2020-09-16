@@ -80,7 +80,6 @@ class RouteService {
 
 class FormService {
 
-    // revisar la respuesta
     get(request, response) {
         let pedestrianID = request.params.pedestrian_id;
         let layerQuery = `select ST_AsGeoJSON(t.*)
@@ -108,10 +107,62 @@ class FormService {
             let geoJson = GeoJSON.parse(data, {GeoJSON: 'geometry'})
             response.json(geoJson)
         });
+    };
+
+    post(request, response) {
+        let pedestrianId = request.params.pedestrian_id;
+        let routeId = request.body.properties.route_id
+        let ans1 = request.body.properties.ans1
+        let ans2Arr = request.body.properties.ans2
+        let geometry = JSON.stringify(request.body.geometry)
+        let geoJson = request.body
+        let formId, ans2Query
+
+        let formQuery = `INSERT INTO gemott.form (pedestrian_id, route_id, geom)
+                        VALUES (${pedestrianId}, ${routeId}, ST_TRANSFORM(ST_GeomFromGeoJSON('${geometry}'), 25831))
+                        RETURNING id;
+                        `
+        
+        pool.query(formQuery, (err, res) => {
+            if (err) {
+                console.error('Error running the query. ', err.stack)
+                return response.json({
+                    mensaje: 'Ops! Sorry, there has been an error running the query'
+                })
+            }
+            formId = res.rows[0].id
+            
+            let ans1Query = `INSERT INTO gemott.quest1 (form_id, answer)
+                        VALUES (${formId}, ${ans1});
+                        `
+
+            pool.query(ans1Query, (err, res)=> {
+                if (err) {
+                    console.error('Error running the query. ', err.stack)
+                    return response.json({
+                        mensaje: 'Ops! Sorry, there has been an error running the query'
+                    })
+                }
+            });
+
+            ans2Arr.forEach(ans2 => {
+                ans2Query = `INSERT INTO gemott.quest2 (form_id, answer)
+                            VALUES (${formId}, ${ans2});
+                            `
+                
+                pool.query(ans2Query, (err, res) => {
+                    if (err) {
+                        console.error('Error running the query. ', err.stack)
+                        return response.json({
+                            mensaje: 'Ops! Sorry, there has been an error running the query'
+                        })
+                    }   
+                })
+            })
+        });
+
+        response.json(geoJson)
     }
 }
-
-
-
 
 module.exports = { RouteService, FormService }

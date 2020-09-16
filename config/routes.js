@@ -15,11 +15,12 @@ const users = new UserService()
 
 // Get geometries and data
 router.get('/pedestrians/:pedestrian_id/routes', routes.get)
-router.get('/pedestrians/:pedestrian_id/new-route', routes.insert)
+router.get('/pedestrians/:pedestrian_id/routes-new', routes.insert)
 router.get('/pedestrians/:pedestrian_id/forms', forms.get)
 
 // Post geometries and data
 router.post('/pedestrians/:pedestrian_id/routes', bodyParser.json(), routes.post)
+router.post('/pedestrians/:pedestrian_id/forms', bodyParser.json(), forms.post)
 
 // Users
 router.post('/login', passport.authenticate('local'), (req, res) => {
