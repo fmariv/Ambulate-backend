@@ -1,3 +1,12 @@
+/**
+ * Services that control the CRUD and HTTP methods
+ * for the geometry data
+ * 
+ * @author Fran Martín
+ * @since 0.1
+ */
+
+
 const Pool = require('pg').Pool
 const GeoJSON = require('geojson');
 const config = require('../../db/config.js');
@@ -12,8 +21,18 @@ const pool = new Pool({
 })
 
 class RouteService {
+    /** 
+     * Class that controls the functions of persistent storage 
+     * and retrieving of routes
+     * 
+    */
 
     get(request, response) {
+        /**
+         * Function that retrieves a GeoJSON that contains
+         * the geometry of all the routes walked by
+         * a pedestrian
+         */
         let pedestrianId = request.params.pedestrian_id;
         let layerQuery = `SELECT ST_AsGeoJSON(t.geom) FROM gemott.route AS t WHERE pedestrian_id = ${pedestrianId};`
         
@@ -37,6 +56,11 @@ class RouteService {
     }
 
     insert(request, response) {
+        /**
+         * Function that inserts a route currently walked
+         * by a pedestrian into the database and returns
+         * the ID
+         */
         let pedestrianId = request.params.pedestrian_id
         let sqlQuery = `INSERT INTO gemott.route (pedestrian_id)
                         VALUES(${pedestrianId})
@@ -56,6 +80,10 @@ class RouteService {
     }
 
     post(request, response) {      
+        /**
+         * Function that posts a route walked
+         * by a pedestrian into the database
+         */
         let pedestrianId = request.params.pedestrian_id 
         let routeId = request.body.properties.route_id
         let geometry = JSON.stringify(request.body.geometry)
@@ -79,8 +107,17 @@ class RouteService {
 }
 
 class FormService {
+    /**
+     * Class that controls the functions of persistent storage
+     * and retrieving of forms
+     */
 
     get(request, response) {
+        /**
+         * Function that retrieves a GeoJSON that contains
+         * the geometry of all the forms answered by
+         * a pedestrian
+         */
         let pedestrianID = request.params.pedestrian_id;
         let layerQuery = `select ST_AsGeoJSON(t.*)
                     FROM (select 
@@ -110,6 +147,10 @@ class FormService {
     };
 
     post(request, response) {
+        /**
+         * Function that posts a form answered
+         * by a pedestrian into the database
+         */
         let pedestrianId = request.params.pedestrian_id;
         let routeId = request.body.properties.route_id
         let ans1 = request.body.properties.ans1

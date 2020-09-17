@@ -1,3 +1,10 @@
+/**
+ * Express and server config
+ * 
+ * @author Fran Martín
+ * @since 0.1
+ */
+
 const Pool = require('pg').Pool
 const express = require('express')
 const app = express()

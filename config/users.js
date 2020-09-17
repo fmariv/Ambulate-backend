@@ -1,3 +1,11 @@
+/**
+ * Service that controls the CRUD and HTTP methods
+ * for the system users
+ * 
+ * @author Fran Martín
+ * @since 0.1
+ */
+
 const Pool = require('pg').Pool
 const bcrypt = require('bcrypt')
 const config = require('../db/config.js');
@@ -13,7 +21,10 @@ const pool = new Pool({
 
 
 class UserService {
-
+    /** 
+     * Class that controls the sign in
+     * 
+    */
     post(request, response) {
         let userMail = request.body.mail;
         let userPass = request.body.pass;

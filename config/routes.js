@@ -1,3 +1,10 @@
+/**
+ * API routes
+ * 
+ * @author Fran Martín
+ * @since 0.1
+ */
+
 const express = require('express');
 const router = express.Router();
 const bodyParser = require('body-parser');

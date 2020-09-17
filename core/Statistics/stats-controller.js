@@ -1,3 +1,11 @@
+/**
+ * Services that control the CRUD and HTTP methods
+ * for the stats data
+ * 
+ * @author Fran Martín
+ * @since 0.1
+ */
+
 const Pool = require('pg').Pool
 const Request = require('request');
 const lengthCalculator = require('@turf/length').default;
@@ -14,8 +22,17 @@ const pool = new Pool({
 })
 
 class StatService {
-
+    /** 
+     * Class that controls the functions for retrieving
+     * the pedestrian statistics
+     * 
+    */
     recount(request, response) {
+        /**
+         * Function that makes a recount of the total
+         * routes walked and forms answered by the
+         * pedestrian
+         */
         let pedestrianId = request.params.pedestrian_id;
     
         let sqlQuery = `SELECT
@@ -40,6 +57,10 @@ class StatService {
     };
     
     distance(request, response) {
+        /**
+         * Function that calculates the total distance
+         * walked by a pedestrian
+         */
         let pedestrianId = request.params.pedestrian_id;
         let requestOptions = {
             url: `http://localhost:8080/api.ambulate/v0/pedestrians/${pedestrianId}/routes`,

@@ -1,3 +1,11 @@
+/**
+ * Passport config for authentication
+ * 
+ * 
+ * @author Fran Martín
+ * @since 0.1
+ */
+
 const Pool = require('pg').Pool
 const passport = require('passport'), 
 LocalStrategy = require('passport-local').Strategy
