@@ -9,7 +9,7 @@
 const Pool = require('pg').Pool
 const LocalStrategy = require('passport-local').Strategy
 const bcrypt = require('bcrypt')
-const config = require('../db/config.js')
+const config = require('../config.js')
 const { db: { user, host, database, password, port } } = config
 
 const pool = new Pool({

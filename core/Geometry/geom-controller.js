@@ -7,7 +7,7 @@
 
 const Pool = require('pg').Pool
 const GeoJSON = require('geojson')
-const config = require('../../db/config.js')
+const config = require('../../config.js')
 const { db: { user, host, database, password, port } } = config
 
 const pool = new Pool({

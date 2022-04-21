@@ -8,7 +8,7 @@
 const Pool = require('pg').Pool
 const Request = require('request')
 const lengthCalculator = require('@turf/length').default
-const config = require('../../db/config.js')
+const config = require('../../config.js')
 const { db: { user, host, database, password, port } } = config
 
 const pool = new Pool({
