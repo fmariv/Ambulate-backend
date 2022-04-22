@@ -2,7 +2,7 @@ var config = {
     db: {
         host: 'localhost',
         user: 'user',
-        database: 'database',
+        database: 'gemott',
         password: 'password',
         port: 5432   
     }

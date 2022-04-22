@@ -36,7 +36,7 @@ class UserService {
         return
       }
 
-      const layerQuery = `INSERT INTO gemott.pedestrian (mail, pass, gen, age)
+      const layerQuery = `INSERT INTO pedestrian (mail, pass, gen, age)
             VALUES ('${userMail}', '${hash}', '${userGen}', ${userAge})`
 
       pool.query(layerQuery, (err, res) => {

@@ -31,7 +31,7 @@ class RouteService {
          * a pedestrian
          */
     const pedestrianId = request.params.pedestrian_id
-    const layerQuery = `SELECT ST_AsGeoJSON(t.geom) FROM gemott.route AS t WHERE pedestrian_id = ${pedestrianId};`
+    const layerQuery = `SELECT ST_AsGeoJSON(t.geom) FROM route AS t WHERE pedestrian_id = ${pedestrianId};`
     // Query the geometries
     pool.query(layerQuery, (err, res) => {
       if (err) {
@@ -58,7 +58,7 @@ class RouteService {
          * the ID
          */
     const pedestrianId = request.params.pedestrian_id
-    const sqlQuery = `INSERT INTO gemott.route (pedestrian_id)
+    const sqlQuery = `INSERT INTO route (pedestrian_id)
                         VALUES(${pedestrianId})
                         RETURNING id;
                         `
@@ -84,7 +84,7 @@ class RouteService {
     const routeId = request.body.properties.route_id
     const geometry = JSON.stringify(request.body.geometry)
     const geoJson = request.body
-    const layerQuery = `UPDATE gemott.route
+    const layerQuery = `UPDATE route
                           SET geom = ST_TRANSFORM(ST_GeomFromGeoJSON('${geometry}'), 25831)
                           WHERE id=${routeId} AND pedestrian_id=${pedestrianId}
                           ;`
@@ -117,7 +117,7 @@ class FormService {
     const pedestrianID = request.params.pedestrian_id
     const layerQuery = `select ST_AsGeoJSON(t.*)
                     FROM (select 
-                    t1.answer, t2.answer, t3.geom from gemott.quest1 as t1, gemott.quest2 as t2, gemott.form as t3 
+                    t1.answer, t2.answer, t3.geom from quest1 as t1, quest2 as t2, form as t3 
                     where t2.form_id = t3.id 
                     and t1.form_id = t3.id 
                     and t3.pedestrian_id = ${pedestrianID})
@@ -154,7 +154,7 @@ class FormService {
     const geoJson = request.body
     let formId, ans2Query
 
-    const formQuery = `INSERT INTO gemott.form (pedestrian_id, route_id, geom)
+    const formQuery = `INSERT INTO form (pedestrian_id, route_id, geom)
                         VALUES (${pedestrianId}, ${routeId}, ST_TRANSFORM(ST_GeomFromGeoJSON('${geometry}'), 25831))
                         RETURNING id;
                         `
@@ -168,7 +168,7 @@ class FormService {
       }
       formId = res.rows[0].id
 
-      const ans1Query = `INSERT INTO gemott.quest1 (form_id, answer)
+      const ans1Query = `INSERT INTO quest1 (form_id, answer)
                         VALUES (${formId}, ${ans1});
                         `
 
@@ -182,7 +182,7 @@ class FormService {
       })
 
       ans2Arr.forEach(ans2 => {
-        ans2Query = `INSERT INTO gemott.quest2 (form_id, answer)
+        ans2Query = `INSERT INTO quest2 (form_id, answer)
                             VALUES (${formId}, ${ans2});
                             `
 

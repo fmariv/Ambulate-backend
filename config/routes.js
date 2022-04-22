@@ -10,8 +10,8 @@ const router = express.Router()
 const bodyParser = require('body-parser')
 const passport = require('passport')
 
-const { RouteService, FormService } = require('../core/Geometry/geom-controller.js')
-const { StatService } = require('../core/Statistics/stats-controller.js')
+const { RouteService, FormService } = require('../core/geometry/geom-controller.js')
+const { StatService } = require('../core/statistics/stats-controller.js')
 const { UserService } = require('./users.js')
 
 const routes = new RouteService()

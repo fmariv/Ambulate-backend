@@ -26,7 +26,7 @@ const localStrategy = new LocalStrategy(
     passwordField: 'password'
   },
   (email, password, done) => {
-    const sqlQuery = `SELECT id, mail, pass FROM gemott.pedestrian WHERE mail='${email}';`
+    const sqlQuery = `SELECT id, mail, pass FROM pedestrian WHERE mail='${email}';`
     pool.query(sqlQuery, (err, result) => {
       if (err) {
         return done(err)
@@ -53,7 +53,7 @@ function serialize (user, done) {
 
 function deserialize (id, done) {
   const parsedID = parseInt(id, 10)
-  pool.query(`SELECT id, mail FROM gemott.pedestrian WHERE id = ${parsedID}`, (err, results) => {
+  pool.query(`SELECT id, mail FROM pedestrian WHERE id = ${parsedID}`, (err, results) => {
     if (err) {
       console.log('Error when selecting user on session deserialize', err)
       return done(err)

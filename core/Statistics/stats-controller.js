@@ -35,11 +35,11 @@ class StatService {
 
     const sqlQuery = `SELECT
                         (SELECT COUNT(*) as forms_count
-                        FROM gemott.form
+                        FROM form
                         where pedestrian_id = ${pedestrianId}  
                         ),
                         (SELECT COUNT(*) as routes_count
-                        FROM gemott.route
+                        FROM route
                         where pedestrian_id = ${pedestrianId});
                     `
     pool.query(sqlQuery, (err, res) => {
